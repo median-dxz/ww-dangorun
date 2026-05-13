@@ -25,8 +25,10 @@ pnpm exec tsx simulate.ts
 
 ```text
 .
+├── race.ts            # 赛道、上下文、移动和结算规则
+├── RaceManager.ts     # 比赛管理、回合流程和结果统计
 ├── dangos.ts          # 团子定义与各自的特殊规则
-├── simulate.ts        # 赛道、比赛流程和模拟入口
+├── simulate.ts        # 模拟入口和本次模拟配置
 ```
 
 ## 修改模拟配置
@@ -35,13 +37,13 @@ pnpm exec tsx simulate.ts
 
 ### 1. 团子列表
 
-修改 `simulate.ts` 底部的 `RACE_DANGOS`：
+在 `simulate.ts` 顶部导入团子后直接注册：
 
 ```ts
-const RACE_DANGOS = [守岸人, 珂莱塔, 布大王, 千咲, 莫宁, 琳奈, 爱弥斯];
+RaceManager.register(守岸人, 珂莱塔, 布大王);
 ```
 
-数组里的团子会依次调用 `RaceManager.register(dango)` 注册。
+只有注册过的团子会进入模拟；`canWin !== false` 的团子会计入胜场统计。
 
 ### 2. 团子初始顺序和初始摆放
 
@@ -80,7 +82,7 @@ const SIMULATION_COUNT = 20000;
 
 ### 4. 棋盘大小和棋盘格子设置
 
-棋盘基础参数在 `simulate.ts` 顶部：
+棋盘基础参数在 `race.ts` 顶部：
 
 ```ts
 const TILES = 30;

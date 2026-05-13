@@ -1,6 +1,6 @@
 const { randomInt } = await import("node:crypto");
 
-import type { Dango, DangoState, RaceContext } from "./simulate.js";
+import type { Dango, DangoState, RaceContext } from "./race.js";
 
 const MAX_DICE_POINTS = 3;
 
@@ -149,7 +149,7 @@ export const 布大王: Dango<NextRoundState> = {
 
         context.walkTo(this, state.progress - state.movePoints, (tileIndex, movingStack) => {
             const stack = context.tileAt(tileIndex).stack;
-            
+
             stack.splice(stack.indexOf(this), 1);
             stack.unshift(this);
             movingStack.splice(0, movingStack.length, ...stack);
