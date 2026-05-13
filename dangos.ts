@@ -388,7 +388,7 @@ export const 奥古斯塔: Dango<NextRoundState> = {
     name: "奥古斯塔",
     onMoveStart(context, state) {
         const stack = context.tileOf(this).stack;
-        const isOnTop = stack.at(-1) === this;
+        const isOnTop = stack.length > 1 && stack.at(-1) === this;
         state.nextRoundFlag = isOnTop;
 
         if (!isOnTop) {
@@ -450,7 +450,7 @@ export const 弗洛洛: Dango = {
     name: "弗洛洛",
     onMoveStart(context, state) {
         const stack = context.tileOf(this).stack;
-        if (stack[0] === this) {
+        if (stack.length > 1 && stack[0] === this) {
             state.movePoints += 3;
         }
     },
