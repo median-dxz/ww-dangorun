@@ -44,6 +44,7 @@ export class RaceContext {
     finishProgress = TILES + 1;
     afterShuffeCallbacks: AfterShuffeCallback[] = [];
     roundIndex = 0;
+    private triggerStackingEvents = false;
 
     rollDice() {
         return randomInt(MIN_DICE_POINTS, MAX_DICE_POINTS + 1);
@@ -103,24 +104,24 @@ export class RaceContext {
         dango: Dango,
         delta: number,
         options: MoveOptions = {},
-        tiggerStackingEvents = true,
+        triggerStackingEvents = false,
     ) {
         const state = this.dangoStates[dango.name]!;
-        this.moveAloneTo(dango, state.progress + delta, options, tiggerStackingEvents);
+        this.moveAloneTo(dango, state.progress + delta, options, triggerStackingEvents);
     }
 
     moveStackTo(dango: Dango, progress: number, options: MoveOptions = {}) {
         const currentStack = this.tileOf(dango).stack;
         const index = currentStack.indexOf(dango);
         const movingDangos = index >= 0 ? currentStack.splice(index) : [dango];
-        this.landDangosAt(progress, movingDangos, options);
+        this.landDangosAt(progress, movingDangos, options, this.triggerStackingEvents);
     }
 
     moveAloneTo(
         dango: Dango,
         progress: number,
         options: MoveOptions = {},
-        triggerStackingEvents = true,
+        triggerStackingEvents = false,
     ) {
         const currentStack = this.tileOf(dango).stack;
         const index = currentStack.indexOf(dango);
@@ -164,6 +165,7 @@ export class RaceContext {
             const nextTileIndex = this.tileIndexForProgress(progress);
             const nextStack = this.tileAt(nextTileIndex).stack;
             const shouldTriggerStackingEvents =
+                this.triggerStackingEvents &&
                 nextTileIndex > 0 &&
                 nextTileIndex < this.finishProgress &&
                 progress < this.finishProgress &&
@@ -187,7 +189,7 @@ export class RaceContext {
         progress: number,
         dangos: Dango[],
         options: MoveOptions = {},
-        triggerStackingEvents = true,
+        triggerStackingEvents = false,
     ) {
         const targetProgress = Math.min(progress, this.finishProgress);
         const targetTileIndex = this.tileIndexForProgress(targetProgress);
@@ -282,15 +284,21 @@ export class RaceContext {
 
         dango.onMoveStart?.(this, state);
 
-        if (dango.move) {
-            dango.move(this, state);
-        } else {
-            this.defaultMove(dango);
+        this.triggerStackingEvents = true;
+        try {
+            if (dango.move) {
+                dango.move(this, state);
+            } else {
+                this.defaultMove(dango);
+            }
+
+            if (!state.skipTileSettlement) {
+                this.settleTile(dango);
+            }
+        } finally {
+            this.triggerStackingEvents = false;
         }
 
-        if (!state.skipTileSettlement) {
-            this.settleTile(dango);
-        }
         state.skipTileSettlement = false;
         dango.onMoveEnd?.(this, state);
         this.moveIndex++;
