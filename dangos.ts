@@ -359,7 +359,7 @@ export const 爱弥斯: Dango<NextRoundState> = {
     name: "爱弥斯",
     onMoveEnd(context, state) {
         const mid = context.tiles.length / 2;
-        if (state.nextRoundFlag == null && state.progress > mid) {
+        if (state.nextRoundFlag == null && state.progress >= mid) {
             let minDistance = context.tiles.length + 2;
             let targetProgress: number | null = null;
             for (const { stack } of context.tiles) {
@@ -418,30 +418,16 @@ export const 尤诺: Dango<NextRoundState> = {
     name: "尤诺",
     onMoveEnd(context, state) {
         const midpoint = context.tiles.length / 2;
-        if (state.nextRoundFlag != null || state.progress <= midpoint) {
+        if (state.nextRoundFlag != null || state.progress < midpoint) {
             return;
         }
 
         state.nextRoundFlag = true;
-        const rank = racingRank(context);
-        const selfIndex = rank.indexOf(this);
-        const frontDango = rank[selfIndex - 1];
-        const backDango = rank[selfIndex + 1];
-
-        if (
-            frontDango &&
-            frontDango.name !== "布大王" &&
-            context.tileOf(frontDango) !== context.tileOf(this)
-        ) {
-            context.moveAloneTo(frontDango, state.progress);
-        }
-
-        if (
-            backDango &&
-            backDango.name !== "布大王" &&
-            context.tileOf(backDango) !== context.tileOf(this)
-        ) {
-            context.moveAloneTo(backDango, state.progress, { placement: "bottom" });
+        const ranks = racingRank(context);
+        for (const d of ranks) {
+            if (d.name !== "布大王") {
+                context.moveAloneTo(d, state.progress, { placement: "bottom" }, false);
+            }
         }
     },
 };
