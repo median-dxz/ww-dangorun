@@ -132,7 +132,12 @@ export class RaceContext {
         this.landDangosAt(progress, [dango], options, triggerStackingEvents);
     }
 
-    walkTo(dango: Dango, targetProgress: number, handleTile: WalkMoveHandler) {
+    walkTo(
+        dango: Dango,
+        targetProgress: number,
+        handleTile: WalkMoveHandler,
+        shouldTriggerStackingEvents?: boolean,
+    ) {
         const currentStack = this.tileOf(dango).stack;
         const index = currentStack.indexOf(dango);
         if (index < 0) {
@@ -164,12 +169,15 @@ export class RaceContext {
             progress += delta;
             const nextTileIndex = this.tileIndexForProgress(progress);
             const nextStack = this.tileAt(nextTileIndex).stack;
-            const shouldTriggerStackingEvents =
-                this.triggerStackingEvents &&
-                nextTileIndex > 0 &&
-                nextTileIndex < this.finishProgress &&
-                progress < this.finishProgress &&
-                nextStack.length > 0;
+            if (shouldTriggerStackingEvents == undefined) {
+                shouldTriggerStackingEvents =
+                    this.triggerStackingEvents &&
+                    nextTileIndex > 0 &&
+                    nextTileIndex < this.finishProgress &&
+                    progress < this.finishProgress &&
+                    nextStack.length > 0;
+            }
+
             const beingStackedDangos = shouldTriggerStackingEvents ? [...nextStack] : [];
 
             nextStack.push(...movingStack);

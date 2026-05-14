@@ -147,19 +147,24 @@ export const 布大王: Dango<NextRoundState> = {
         const lastTileProgress = lastDango ? context.stateOf(lastDango).progress : undefined;
         const currentProgress = state.progress;
 
-        context.walkTo(this, state.progress - state.movePoints, (tileIndex, movingStack) => {
-            const stack = context.tileAt(tileIndex).stack;
+        context.walkTo(
+            this,
+            state.progress - state.movePoints,
+            (tileIndex, movingStack) => {
+                const stack = context.tileAt(tileIndex).stack;
 
-            stack.splice(stack.indexOf(this), 1);
-            stack.unshift(this);
-            movingStack.splice(0, movingStack.length, ...stack);
+                stack.splice(stack.indexOf(this), 1);
+                stack.unshift(this);
+                movingStack.splice(0, movingStack.length, ...stack);
 
-            for (const dango of stack) {
-                if (dango.name === "绯雪") {
-                    context.stateOf(绯雪).metBudawang = true;
+                for (const dango of stack) {
+                    if (dango.name === "绯雪") {
+                        context.stateOf(绯雪).metBudawang = true;
+                    }
                 }
-            }
-        });
+            },
+            false,
+        );
 
         if (
             lastTileProgress !== undefined &&
@@ -195,14 +200,19 @@ export const 坎特蕾拉: Dango<NextRoundState> = {
         }
 
         const target = Math.min(state.progress + state.movePoints, context.finishProgress - 1);
-        context.walkTo(this, target, (tileIndex, movingStack) => {
-            const curStack = context.tileAt(tileIndex).stack;
-            if (curStack.length > 0 && !state.nextRoundFlag) {
-                state.nextRoundFlag = true;
-                const pickedDangos = curStack.splice(0);
-                movingStack.unshift(...pickedDangos);
-            }
-        });
+        context.walkTo(
+            this,
+            target,
+            (tileIndex, movingStack) => {
+                const curStack = context.tileAt(tileIndex).stack;
+                if (curStack.length > 0 && !state.nextRoundFlag) {
+                    state.nextRoundFlag = true;
+                    const pickedDangos = curStack.splice(0);
+                    movingStack.unshift(...pickedDangos);
+                }
+            },
+            false,
+        );
     },
 };
 
