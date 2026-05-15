@@ -71,14 +71,22 @@ export const RaceManager = {
                 this.context.dangoStates[dango.name]!.progress >= this.context.finishProgress
             );
         })!;
-        this.result[winner.name]!++;
+        this.result[winner.name]!.wins++;
+        const winningRounds = this.result[winner.name]!.winningRounds;
+        winningRounds.set(
+            this.context.roundIndex,
+            (winningRounds.get(this.context.roundIndex) ?? 0) + 1,
+        );
     },
 
     register(...dangos: Dango[]) {
         for (const dango of dangos) {
             this.dangos.push(dango);
             if (dango.canWin !== false) {
-                this.result[dango.name] = 0;
+                this.result[dango.name] = {
+                    wins: 0,
+                    winningRounds: new Map(),
+                };
             }
         }
     },
@@ -155,5 +163,11 @@ export const RaceManager = {
         return Number(stepText);
     },
 
-    result: {} as Record<string, number>,
+    result: {} as Record<
+        string,
+        {
+            wins: number;
+            winningRounds: Map<number, number>;
+        }
+    >,
 };
