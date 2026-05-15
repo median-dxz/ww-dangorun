@@ -5,12 +5,12 @@
 ## 今日赛程预测 (2026-05-14)
 
 ```
-卡卡罗团子获胜: 2935次
-尤诺团子获胜: 3477次
-奥古斯塔团子获胜: 3140次
-弗洛洛团子获胜: 2949次
-今汐团子获胜: 4466次
-长离团子获胜: 3033次
+琳奈团子获胜: 4493次，获胜回合统计: 众数: 8, 平均数: 7.86
+莫宁团子获胜: 2493次，获胜回合统计: 众数: 8, 平均数: 8.09
+陆·赫斯团子获胜: 3123次，获胜回合统计: 众数: 8, 平均数: 8.05
+菲比团子获胜: 3956次，获胜回合统计: 众数: 8, 平均数: 8.07
+弗洛洛团子获胜: 2817次，获胜回合统计: 众数: 8, 平均数: 8.21
+长离团子获胜: 3118次，获胜回合统计: 众数: 8, 平均数: 7.98
 ```
 
 ## 环境要求
@@ -68,10 +68,10 @@ RaceManager.setInitialMoveOrder(["守岸人", "珂莱塔", "布大王"]);
 
 ```ts
 RaceManager.setInitialTileSetup({
-  "-1": ["珂莱塔"],
-  "-2": ["琳奈", "千咲"],
-  "-3": ["爱弥斯", "莫宁"],
-  "-4": ["守岸人"],
+    "-1": ["珂莱塔"],
+    "-2": ["琳奈", "千咲"],
+    "-3": ["爱弥斯", "莫宁"],
+    "-4": ["守岸人"],
 });
 ```
 
@@ -105,13 +105,13 @@ const MIN_DICE_POINTS = 1;
 
 ```ts
 for (const tileIndex of [2, 10, 15, 22]) {
-  tiles[tileIndex]!.type = "advance";
+    tiles[tileIndex]!.type = "advance";
 }
 for (const tileIndex of [9, 27]) {
-  tiles[tileIndex]!.type = "retreat";
+    tiles[tileIndex]!.type = "retreat";
 }
 for (const tileIndex of [5, 19, 30]) {
-  tiles[tileIndex]!.type = "shuffle";
+    tiles[tileIndex]!.type = "shuffle";
 }
 ```
 
