@@ -110,7 +110,7 @@ export const 绯雪: Dango<MetBudawangState> = {
     name: "绯雪",
     onMoveStart(_context, state) {
         if (state.metBudawang) {
-            state.movePoints += 2;
+            state.movePoints += 1;
         }
     },
     onMoveEnd(context, state) {
@@ -397,6 +397,10 @@ export const 爱弥斯: Dango<NextRoundState> = {
 export const 奥古斯塔: Dango<NextRoundState> = {
     name: "奥古斯塔",
     onMoveStart(context, state) {
+        if (state.nextRoundFlag) {
+            state.nextRoundFlag = false;
+            return;
+        }
         const stack = context.tileOf(this).stack;
         const isOnTop = stack.length > 1 && stack.at(-1) === this;
         state.nextRoundFlag = isOnTop;
@@ -408,10 +412,9 @@ export const 奥古斯塔: Dango<NextRoundState> = {
         const self = this;
         context.registerAfterShuffeCallback(function (dangos) {
             const index = dangos.indexOf(self);
-            if (index >= 0) {
-                dangos.splice(index, 1);
-                dangos.push(self);
-            }
+
+            dangos.splice(index, 1);
+            dangos.push(self);
         });
     },
     move(context, state) {
