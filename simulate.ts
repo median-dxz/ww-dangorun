@@ -1,7 +1,7 @@
 import { RaceManager } from "./RaceManager.js";
-import { 今汐, 卡卡罗, 卡提希娅, 奥古斯塔, 尤诺, 布大王, 绯雪 } from "./dangos.js";
+import { 千咲, 守岸人, 布大王, 爱弥斯, 珂莱塔, 西格莉卡, 达妮娅 } from "./dangos.js";
 
-RaceManager.register(布大王, 奥古斯塔, 今汐, 绯雪, 尤诺, 卡卡罗, 卡提希娅);
+RaceManager.register(布大王, 西格莉卡, 守岸人, 珂莱塔, 千咲, 爱弥斯, 达妮娅);
 
 const SIMULATION_COUNT = 20000;
 
